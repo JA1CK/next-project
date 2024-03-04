@@ -1,0 +1,21 @@
+/* styles/globals.css */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+:root {
+  --primary-color: #3f51b5; /* Main primary color */
+  --secondary-color: #f50057; /* Secondary color */
+  --text-color: #333; /* Main text color */
+  --background-color: #fff; /* Background color */
+  --accent-color: #ff9800; /* Accent color */
+  --border-color: #ccc; /* Border color */
+  --success-color: #4caf50; /* Success color */
+  --error-color: #f44336; /* Error color */
+}
+
+.active {
+  background-color: #bfdbfe;
+  font-weight: bold;
+  color: #111827;
+}
