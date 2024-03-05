@@ -19,7 +19,7 @@ export default function EditMenuDetails({ params }: { params: { restaurantId: nu
     const [menuItem, setMenuItem] = useState<MenuItem | null>(null);
     const [editedMenuItem, setEditedMenuItem] = useState<Partial<MenuItem | null>>({});
     const router = useRouter();
-    const port = process.env.BASE_URL || "localhost:8000";
+    const port = process.env.NEXT_PUBLIC_BASE_URL || "localhost:8000";
 
     useEffect(() => {
         const fetchMenuItemDetails = async () => {

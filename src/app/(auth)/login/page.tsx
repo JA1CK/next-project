@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie"; // Import Cookies library
 import { useUser } from "@/context/UserContext"; // Import the user context
@@ -13,10 +13,10 @@ export default function Login() {
     const { dispatch } = useUser(); // Access the dispatch function from context
     const router = useRouter();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const port = process.env.BASE_URL || "localhost:8000";
+            const port = process.env.NEXT_PUBLIC_BASE_URL || "localhost:8000";
             const response = await axios.post(`${port}/api/users/login`, {
                 username,
                 password,
@@ -25,25 +25,35 @@ export default function Login() {
             // Set cookies with token and isAdmin values
             Cookies.set("token", token, { httpOnly: false });
             Cookies.set("isAdmin", isAdmin, { httpOnly: false });
-            Cookies.set("username", username, { httpOnly: false });  
-            
+            Cookies.set("username", username, { httpOnly: false });
+
             // Dispatch action to update user state
             dispatch({
-              type: 'LOGIN',
-              payload: {
-                username,
-                isAdmin,
-                token
-              }
+                type: 'LOGIN',
+                payload: {
+                    username,
+                    isAdmin,
+                    token
+                }
             });
 
             // Redirect to home page or any other page after successful login
             router.push("/restaurants");
-        } catch (err) {
-            setError(err.response.data); // Display error message from the server
-            console.error(err);
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err)) {
+                const axiosError = err as AxiosError; // Cast 'err' to AxiosError
+                if (axiosError.response && axiosError.response.data) {
+                    const errorMessage = typeof axiosError.response.data === 'string' ? axiosError.response.data : "An unknown error occurred.";
+                    setError(errorMessage);
+                } else {
+                    setError("An unknown error occurred."); // Fallback error message
+                }
+                console.error(axiosError);
+            } else {
+                console.error('Unknown error occurred:', err);
+            }
         }
-    };
+    }
 
     return (
         <div className="max-w-md mx-auto mt-8">

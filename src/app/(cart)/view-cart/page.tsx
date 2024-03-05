@@ -4,54 +4,56 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import CartItemCard from "@/components/CartItem";
 
+interface CartItem {
+    restaurantId: string;
+    menuId: string;
+    // Add other properties as needed
+}
+
 const ViewCart = () => {
-    const [cart, setCart] = useState(null); // State to store cart data
-    const [menuItems, setMenuItems] = useState([]); // State to store menu items
-    const [showCheckoutPopup, setShowCheckoutPopup] = useState(false); // State to manage checkout pop-up visibility
-    const port = process.env.BASE_URL || "localhost:8000";
+    const [cart, setCart] = useState<CartItem[] | null>(null); // Explicitly type cart as CartItem[] or null
+    const [menuItems, setMenuItems] = useState<CartItem[]>([]); // Explicitly type menuItems as CartItem[]
+    const [showCheckoutPopup, setShowCheckoutPopup] = useState(false);
+    const port = process.env.NEXT_PUBLIC_BASE_URL || "localhost:8000";
 
     useEffect(() => {
-        // Fetch cart data from the backend
         const fetchCart = async () => {
             try {
                 const username = Cookies.get("username");
                 const token = Cookies.get("token");
                 const response = await axios.post(`${port}/api/users/viewcart`, { username, token });
-                setCart(response.data); // Update cart state with fetched data
+                setCart(response.data);
             } catch (error) {
                 console.error("Error fetching cart:", error);
             }
         };
 
-        fetchCart(); // Call fetchCart function when the component mounts
-    }, []);
+        fetchCart();
+    }, [port]);
 
     useEffect(() => {
-        // Fetch menu details for each item in the cart
         const fetchMenuItems = async () => {
             if (cart) {
                 const promises = cart.map(async (item) => {
                     try {
                         const response = await axios.get(`${port}/api/menus/restaurant/${item.restaurantId}/${item.menuId}`);
-                        return response.data; // Return menu item data
+                        return response.data;
                     } catch (error) {
                         console.error(`Error fetching menu details for item ${item.menuId}:`, error);
                         return null;
                     }
                 });
                 const menuData = await Promise.all(promises);
-                setMenuItems(menuData.filter(Boolean)); // Filter out any null values
+                setMenuItems(menuData.filter(Boolean) as CartItem[]);
             }
         };
+        fetchMenuItems();
+    }, [cart, port]);
 
-        fetchMenuItems(); // Call fetchMenuItems function when cart state changes
-    }, [cart]);
-
-    const removeFromCart = async (menuId) => {
+    const removeFromCart = async (menuId: string) => {
         try {
             const response = await axios.post(`${port}/api/users/remove-from-cart`, { menuId, token: Cookies.get("token"), username: Cookies.get("username") });
             if (response.status === 200) {
-                // If successful, update the cart state
                 setCart(response.data);
             } else {
                 console.error("Failed to remove item from cart:", response.data.message);
@@ -65,7 +67,6 @@ const ViewCart = () => {
         try {
             const response = await axios.post(`${port}/api/users/checkout`, { username: Cookies.get("username"), token: Cookies.get("token") });
             if (response.status === 200) {
-                // If successful, display a success message or redirect to a thank you page
                 console.log("Checkout successful!");
                 setShowCheckoutPopup(true);
                 setCart([]);
@@ -82,7 +83,6 @@ const ViewCart = () => {
             <h1 className="text-3xl font-semibold text-center mb-8"><u>Your Cart</u></h1>
             {menuItems.length > 0 && (
                 <div>
-                    {/* Display menu items here */}
                     {menuItems.map((menuItem, index) => (
                         <div key={index} className="border rounded-lg p-4 mb-4">
                             <CartItemCard cartItem={menuItem} />
@@ -92,7 +92,7 @@ const ViewCart = () => {
                 </div>
             )}
             {menuItems.length === 0 && <p className="text-3xl font-semibold text-center mb-8">Cart is Empty.</p>}
-            {menuItems.length != 0 && <div className="text-center">
+            {menuItems.length !== 0 && <div className="text-center">
                 <button onClick={handleCheckout} className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300">Checkout</button>
             </div>}
             {showCheckoutPopup && (

@@ -10,7 +10,7 @@ export default function Home() {
                     <p className="text-lg pt-2 text-gray-600">Developed by <b>Team ReactRangers</b></p>
                 </div>
             </div>
-            <p className="mb-4">This application allows users to manage restaurants and their menus. Here's a brief overview of its features:</p>
+            <p className="mb-4">This application allows users to manage restaurants and their menus. Here&apos; a brief overview of its features:</p>
             <div className="mb-4">
                 <h2 className="text-2xl font-semibold mb-2">Features:</h2>
                 <ul className="list-disc list-inside">

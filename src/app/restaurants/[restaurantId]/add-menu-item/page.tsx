@@ -5,16 +5,20 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import Link from 'next/link';
 
-export default function AddMenuItem({ params }) {
+interface Params {
+    restaurantId: string;
+}
+
+export default function AddMenuItem({ params }: { params: Params }) {
     const { restaurantId } = params;
     const [formData, setFormData] = useState({
         itemName: '',
         price: '',
     });
     const router = useRouter();
-    const port = process.env.BASE_URL || "localhost:8000";
+    const port = process.env.NEXT_PUBLIC_BASE_URL || "localhost:8000";
 
-    const handleChange = (e) => {
+    const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
@@ -22,7 +26,7 @@ export default function AddMenuItem({ params }) {
         }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const token = Cookies.get("token");
         const isAdmin = Cookies.get("isAdmin");

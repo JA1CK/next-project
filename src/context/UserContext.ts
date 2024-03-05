@@ -4,11 +4,11 @@ import React, { createContext, useContext, useReducer, ReactNode } from "react";
 type UserState = {
   username: string;
   isAdmin: boolean;
-  token: string;
+  token: string | undefined;
 };
 
 type Action =
-  | { type: "LOGIN"; payload: { username: string; isAdmin: boolean; token: string } }
+  | { type: "LOGIN"; payload: { username: string; isAdmin: boolean; token: string | undefined } }
   | { type: "LOGOUT" };
 
 // Define context type

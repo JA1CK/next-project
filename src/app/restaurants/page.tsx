@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axios from 'axios';
 import Cookies from "js-cookie";
 import { useUser } from "@/context/UserContext";
+import { env } from 'node:process';
 
 interface RestaurantType {
     _id: string;
@@ -25,7 +26,7 @@ export default function Restaurants() {
 
     const [restaurants, setRestaurants] = useState<RestaurantType[]>([]);
     const { user, dispatch } = useUser(); // Access the user state and dispatch function from context
-    const port = process.env.BASE_URL || "localhost:8000";
+    const port = process.env.NEXT_PUBLIC_BASE_URL;    
 
     const sendGetRequest = async () => {
         try {

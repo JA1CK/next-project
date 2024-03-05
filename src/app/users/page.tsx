@@ -5,6 +5,7 @@ import axios from 'axios';
 import Cookies from "js-cookie";
 
 interface User {
+    _id: string;
     username: string;
     password: string;
     admin?: boolean; // Optional field
@@ -21,7 +22,7 @@ export default function Restaurants() {
 
     const [users, setUsers] = useState<User[]>([]);
     const username = Cookies.get("username");
-    const port = process.env.BASE_URL || "localhost:8000";
+    const port = process.env.NEXT_PUBLIC_BASE_URL || "localhost:8000";
 
     const sendGetRequest = async () => {
         try {

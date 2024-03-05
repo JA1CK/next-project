@@ -28,7 +28,7 @@ export default function MenuDetails({ params }: MenuDetailsProps) {
     const [menu, setMenu] = useState<MenuItem | null>(null);
     const router = useRouter();
     const { user, dispatch } = useUser(); // Access the user state and dispatch function from context
-    const port = process.env.BASE_URL || "localhost:8000";
+    const port = process.env.NEXT_PUBLIC_BASE_URL || "localhost:8000";
 
     useEffect(() => {
         const fetchMenuDetails = async () => {

@@ -17,7 +17,7 @@ const Header = () => {
                 type: 'LOGIN',
                 payload: {
                     username: storedUsername,
-                    isAdmin: storedIsAdmin,
+                    isAdmin: Boolean(storedIsAdmin),
                     token: storedToken,
                 }
             });

@@ -26,7 +26,7 @@ export default function EditRestaurantDetails({ params }: { params: { restaurant
     const [restaurant, setRestaurant] = useState<RestaurantType | null>(null);
     const [newRestaurantDetails, setNewRestaurantDetails] = useState<Partial<RestaurantType | null>>({});
     const router = useRouter();
-    const port = process.env.BASE_URL || "localhost:8000";
+    const port = process.env.NEXT_PUBLIC_BASE_URL || "localhost:8000";
 
     useEffect(() => {
         const fetchRestaurantDetails = async () => {
