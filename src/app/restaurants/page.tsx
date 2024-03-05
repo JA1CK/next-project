@@ -27,6 +27,7 @@ export default function Restaurants() {
     const [restaurants, setRestaurants] = useState<RestaurantType[]>([]);
     const { user, dispatch } = useUser(); // Access the user state and dispatch function from context
     const port = process.env.NEXT_PUBLIC_BASE_URL;    
+    const [loading, setLoading] = useState<boolean>(true);
 
     const sendGetRequest = async () => {
         try {
@@ -34,6 +35,7 @@ export default function Restaurants() {
                 `${port}/api/restaurants`
             );
             setRestaurants(response.data);
+            setLoading(false);
         } catch (err) {
             console.log(err);
         }
@@ -73,6 +75,7 @@ export default function Restaurants() {
     return (
         <>
             <h1 className="text-3xl font-semibold text-center mb-8"><u>Restaurants</u></h1>
+            {loading && <p className="text-3xl font-semibold text-center mb-8">Loading...</p>}
             <div className="flex justify-center mb-4">
                 {user.isAdmin === true && <Link href={`/restaurants/add-restaurant`} className="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded transition duration-300">
                     Add Restaurant

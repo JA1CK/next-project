@@ -77,9 +77,9 @@ export default function MenuDetails({ params }: MenuDetailsProps) {
                         <h1 className="text-3xl font-semibold mb-4 text-center">{menu.itemName}</h1>
                         <h2 className="text-2xl font-bold mb-4 text-center">$ {menu.price}</h2>
                         <div className="flex justify-center space-x-4">
-                            <button onClick={handleAddToCart} className="bg-blue-500 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded">
+                            {user.token && <button onClick={handleAddToCart} className="bg-blue-500 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded">
                                 Add to Cart
-                            </button>
+                            </button>}
                             {user.isAdmin === true && <button onClick={handleEditDetails} className="bg-green-700 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded">
                                 Edit Item
                             </button>}
